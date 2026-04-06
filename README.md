@@ -11,23 +11,91 @@ Your goal is to:
 - Evaluate what your system gets right and wrong
 - Reflect on how this mirrors real world AI recommenders
 
-Replace this paragraph with your own summary of what your version does.
+This version simulates a small music recommender that compares a user's taste profile against song features in `songs.csv`. It gives each song a weighted score based on genre, mood, energy, and acoustic fit, then ranks the strongest matches as recommendations.
 
 ---
 
 ## How The System Works
 
-Explain your design in plain language.
+Real streaming platforms often combine **collaborative filtering** (learning from what similar users play, skip, save, and replay) with **content-based filtering** (matching the attributes of a song itself). My simulator focuses on the content-based side. It compares one user's preferences to every song in the catalog and prioritizes tracks that match the user's preferred genre and mood while also staying close to the user's target energy and acoustic vibe.
 
-Some prompts to answer:
+### Features used in this simulation
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+**`Song` fields**
+- `genre`
+- `mood`
+- `energy`
+- `tempo_bpm`
+- `valence`
+- `danceability`
+- `acousticness`
 
-You can include a simple diagram or bullet list if helpful.
+**`UserProfile` fields**
+- `favorite_genre`
+- `favorite_mood`
+- `target_energy`
+- `likes_acoustic`
+
+### Example taste profile
+
+```python
+{
+    "favorite_genre": "lofi",
+    "favorite_mood": "focused",
+    "target_energy": 0.40,
+    "likes_acoustic": True,
+}
+```
+
+This profile is specific enough to separate **intense rock** from **chill lofi** because it uses both label-based preferences (`genre`, `mood`) and vibe-based features (`energy`, `acousticness`).
+
+### Algorithm Recipe
+
+1. Start each song at `0` points.
+2. Add `+2.0` if the song's `genre` matches the user's favorite genre.
+3. Add `+1.5` if the song's `mood` matches the user's favorite mood.
+4. Add energy similarity points with `1 - abs(song_energy - target_energy)` so songs closer to the user's target score higher.
+5. Add a small bonus such as `+0.5` if the song's `acousticness` matches whether the user likes acoustic songs.
+6. Sort all songs by total score from highest to lowest.
+7. Return the top `k` songs with a short explanation of why they matched.
+
+### Why scoring and ranking both matter
+
+- The **scoring rule** decides how well one song matches the profile.
+- The **ranking rule** orders the whole catalog so the strongest matches rise to the top.
+
+### Data Flow
+
+```mermaid
+flowchart LR
+    A[User Preferences] --> B[Read songs.csv]
+    B --> C[Score one song at a time]
+    C --> D[Apply weights for genre, mood, energy, and acousticness]
+    D --> E[Store score and explanation]
+    E --> F[Rank all songs by score]
+    F --> G[Return Top K recommendations]
+```
+
+### Expected bias / limitation
+
+This system might over-prioritize **genre** and **mood**, which means it could ignore surprising songs that match the user's vibe but use a different label. It also does not use community behavior, so it misses the large-scale "people like you also loved this" effect that real streaming platforms use.
+
+### CLI Example Output
+
+```text
+Loaded songs: 16
+
+Top recommendations:
+1. Sunrise City by Neon Echo
+   Score: 4.98
+   Why: genre match (+2.0); mood match (+1.5); energy similarity (+0.98); acoustic preference match (+0.5)
+
+2. Gym Hero by Max Pulse
+   Score: 3.37
+   Why: genre match (+2.0); energy similarity (+0.87); acoustic preference match (+0.5)
+```
+
+> Add your terminal screenshot here to show the full CLI-first simulation output.
 
 ---
 

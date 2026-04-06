@@ -95,7 +95,7 @@ Top recommendations:
    Why: genre match (+2.0); energy similarity (+0.87); acoustic preference match (+0.5)
 ```
 
-> Add your terminal screenshot here to show the full CLI-first simulation output.
+![CLI output screenshot](recommender-output.png)
 
 ---
 

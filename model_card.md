@@ -8,7 +8,11 @@
 
 ## 2. Intended Use
 
-This recommender is designed to suggest a small set of songs from a classroom-sized catalog based on a user's preferred genre, mood, energy level, and acoustic preference. It is meant for learning and experimentation, not for real-world production use. The model assumes that a person's musical taste can be represented by a few simple preferences.
+**Goal / Task:** predict which songs from a small catalog are most likely to match a user's taste profile.
+
+**Intended use:** classroom exploration, basic demos, and learning how recommendation systems rank items.
+
+**Non-intended use:** real streaming apps, hiring or school decisions, or any situation where a tiny and biased catalog would affect real people.
 
 ---
 
@@ -52,4 +56,6 @@ If I had more time, I would add more songs, more moods, and more user features s
 
 ## 9. Personal Reflection
 
-This project showed me that recommenders do not magically understand taste; they turn a few weighted signals into a ranking. What surprised me most was how quickly the results changed when I adjusted one weight, which made the system feel both transparent and fragile. Building it made me think more critically about real streaming apps, because even when the recommendations feel smart, human judgment still matters when deciding what is fair, diverse, and actually enjoyable.
+My biggest learning moment was seeing how a very small scoring rule could still feel like a real recommendation system. It was surprising that changing one weight could quickly change which songs rose to the top.
+
+AI tools helped me brainstorm user profiles, explain ranking behavior, and organize my documentation, but I still had to double-check the suggestions against my actual code and terminal output. If I kept extending this project, I would try a larger dataset, more detailed user preferences, and a diversity rule so the system would not keep recommending songs that are too similar.

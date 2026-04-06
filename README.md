@@ -29,12 +29,23 @@ Real streaming platforms often combine **collaborative filtering** (learning fro
 - `valence`
 - `danceability`
 - `acousticness`
+- `popularity`
+- `release_decade`
+- `mood_tag`
+- `instrumentalness`
+- `focus_score`
 
 **`UserProfile` fields**
 - `favorite_genre`
 - `favorite_mood`
 - `target_energy`
 - `likes_acoustic`
+- `preferred_mood_tag`
+- `preferred_decade`
+- `target_popularity`
+- `likes_instrumental`
+- `target_focus`
+- `mode`
 
 ### Example taste profile
 
@@ -52,12 +63,12 @@ This profile is specific enough to separate **intense rock** from **chill lofi**
 ### Algorithm Recipe
 
 1. Start each song at `0` points.
-2. Add `+2.0` if the song's `genre` matches the user's favorite genre.
-3. Add `+1.5` if the song's `mood` matches the user's favorite mood.
-4. Add energy similarity points with `1 - abs(song_energy - target_energy)` so songs closer to the user's target score higher.
-5. Add a small bonus such as `+0.5` if the song's `acousticness` matches whether the user likes acoustic songs.
-6. Sort all songs by total score from highest to lowest.
-7. Return the top `k` songs with a short explanation of why they matched.
+2. Add more points for matching the user's preferred `genre` and `mood`.
+3. Reward songs whose `energy`, `focus_score`, and `popularity` are numerically close to the user's targets.
+4. Add smaller bonuses for a matching `mood_tag`, a preferred `release_decade`, and whether the user likes acoustic or instrumental tracks.
+5. Let the user choose a scoring mode such as `genre-first`, `mood-first`, `energy-focused`, or `balanced`.
+6. Apply a small **diversity penalty** if the same artist or genre is already appearing in the top results.
+7. Sort all songs by the adjusted score and return the top `k` songs with a short explanation of why they matched.
 
 ### Why scoring and ranking both matter
 
@@ -103,6 +114,10 @@ Top recommendations:
 ![Chill Lofi](Chill%20Lofi.png)
 ![High-Energy Pop](High-Energy%20Pop.png)
 ![Deep Intense Rock](Deep%20Intense%20Rock.png)
+
+#### Optional Extension Output
+
+![Optional extension table output](table-output.png)
 
 ---
 

@@ -1,17 +1,17 @@
-id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
-11,Velvet Afterglow,Luna Rue,r&b,smooth,0.58,96,0.74,0.77,0.44
-12,Trailhead Morning,Cedar Vale,country,warm,0.51,104,0.72,0.64,0.67
-13,Neon Festival,Pixel Hearts,edm,euphoric,0.95,128,0.83,0.91,0.06
-14,Marble Quiet,North Atlas,classical,calm,0.18,58,0.53,0.20,0.98
-15,City Cipher,Rhythm North,hip-hop,confident,0.69,92,0.66,0.84,0.12
-16,Static Fire,Iron Avenue,metal,aggressive,0.97,168,0.34,0.49,0.03
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,popularity,release_decade,mood_tag,instrumentalness,focus_score
+1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18,88,2020,bright,0.05,0.42
+2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71,76,2010,cozy,0.74,0.95
+3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10,81,2010,driving,0.08,0.36
+4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86,72,2010,nostalgic,0.81,0.92
+5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05,90,2020,anthemic,0.02,0.33
+6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92,69,2020,cinematic,0.89,0.88
+7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89,63,2000,smooth,0.67,0.73
+8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22,79,1980,nocturnal,0.21,0.57
+9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78,84,2010,studious,0.76,0.98
+10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35,82,2020,bright,0.12,0.46
+11,Velvet Afterglow,Luna Rue,r&b,smooth,0.58,96,0.74,0.77,0.44,77,2000,romantic,0.09,0.51
+12,Trailhead Morning,Cedar Vale,country,warm,0.51,104,0.72,0.64,0.67,66,2010,earthy,0.14,0.60
+13,Neon Festival,Pixel Hearts,edm,euphoric,0.95,128,0.83,0.91,0.06,92,2020,euphoric,0.01,0.29
+14,Marble Quiet,North Atlas,classical,calm,0.18,58,0.53,0.20,0.98,61,1990,serene,0.97,0.91
+15,City Cipher,Rhythm North,hip-hop,confident,0.69,92,0.66,0.84,0.12,80,2020,gritty,0.04,0.52
+16,Static Fire,Iron Avenue,metal,aggressive,0.97,168,0.34,0.49,0.03,74,2000,ferocious,0.00,0.21

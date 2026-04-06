@@ -18,7 +18,7 @@
 
 ## 3. How the Model Works
 
-The model compares each song in `songs.csv` to the user's profile. It adds points for a matching genre, a matching mood, and a close energy level, and it gives a small bonus when the song's acousticness fits the user's preference. After every song gets a score, the system ranks the list from highest to lowest and returns the top recommendations along with short reasons.
+The model compares each song in `songs.csv` to the user's profile. It adds points for matching genre, mood, and detailed mood tags, then uses math-based similarity rules for energy, popularity, focus, and release decade. It also supports multiple scoring modes like **genre-first**, **mood-first**, and **energy-focused**. After every song gets a score, the system reranks the list with a small diversity penalty so the top results are less likely to repeat the same artist or genre.
 
 ---
 

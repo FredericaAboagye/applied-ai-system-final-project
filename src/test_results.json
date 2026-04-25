@@ -1,0 +1,124 @@
+[
+  {
+    "test_name": "High-Energy Pop Profile",
+    "status": "PASS",
+    "num_recommendations": 5,
+    "avg_score": 4.33,
+    "avg_confidence": 0.53,
+    "min_confidence": 0.48,
+    "max_confidence": 0.61,
+    "used_llm": 0,
+    "genres_returned": [
+      "pop",
+      "pop",
+      "indie pop",
+      "edm",
+      "rock"
+    ],
+    "expected_genres": [
+      "pop",
+      "edm",
+      "indie pop"
+    ],
+    "genre_match_count": 4,
+    "genre_match_rate": 1.33,
+    "top_recommendation": "Sunrise City by Neon Echo"
+  },
+  {
+    "test_name": "Chill Lofi Profile",
+    "status": "PASS",
+    "num_recommendations": 5,
+    "avg_score": 4.76,
+    "avg_confidence": 0.54,
+    "min_confidence": 0.48,
+    "max_confidence": 0.59,
+    "used_llm": 0,
+    "genres_returned": [
+      "lofi",
+      "lofi",
+      "ambient",
+      "lofi",
+      "jazz"
+    ],
+    "expected_genres": [
+      "lofi",
+      "ambient",
+      "jazz"
+    ],
+    "genre_match_count": 5,
+    "genre_match_rate": 1.67,
+    "top_recommendation": "Library Rain by Paper Lanterns"
+  },
+  {
+    "test_name": "Deep Intense Rock Profile",
+    "status": "PASS",
+    "num_recommendations": 5,
+    "avg_score": 3.97,
+    "avg_confidence": 0.52,
+    "min_confidence": 0.5,
+    "max_confidence": 0.56,
+    "used_llm": 0,
+    "genres_returned": [
+      "rock",
+      "pop",
+      "indie pop",
+      "pop",
+      "edm"
+    ],
+    "expected_genres": [
+      "rock",
+      "metal"
+    ],
+    "genre_match_count": 1,
+    "genre_match_rate": 0.5,
+    "top_recommendation": "Storm Runner by Voltline"
+  },
+  {
+    "test_name": "Acoustic Intense Profile (Edge Case)",
+    "status": "PASS",
+    "num_recommendations": 5,
+    "avg_score": 3.69,
+    "avg_confidence": 0.51,
+    "min_confidence": 0.48,
+    "max_confidence": 0.54,
+    "used_llm": 0,
+    "genres_returned": [
+      "indie pop",
+      "rock",
+      "pop",
+      "country",
+      "hip-hop"
+    ],
+    "expected_genres": [
+      "indie pop",
+      "acoustic"
+    ],
+    "genre_match_count": 1,
+    "genre_match_rate": 0.5,
+    "top_recommendation": "Rooftop Lights by Indigo Parade"
+  },
+  {
+    "test_name": "Instrumental Jazz Profile",
+    "status": "PASS",
+    "num_recommendations": 5,
+    "avg_score": 3.33,
+    "avg_confidence": 0.5,
+    "min_confidence": 0.48,
+    "max_confidence": 0.56,
+    "used_llm": 0,
+    "genres_returned": [
+      "jazz",
+      "lofi",
+      "lofi",
+      "classical",
+      "ambient"
+    ],
+    "expected_genres": [
+      "jazz",
+      "classical"
+    ],
+    "genre_match_count": 2,
+    "genre_match_rate": 1.0,
+    "top_recommendation": "Coffee Shop Stories by Slow Stereo"
+  }
+]

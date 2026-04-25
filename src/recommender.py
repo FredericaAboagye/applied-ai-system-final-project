@@ -1,8 +1,12 @@
-from typing import List, Dict, Tuple, Any
+from typing import List, Dict, Tuple, Any, Optional
 from dataclasses import dataclass
 from pathlib import Path
 from collections import Counter
 import csv
+import logging
+import uuid
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -116,6 +120,24 @@ def _pick_user_value(user_prefs: Dict[str, Any], *keys: str, default: Any = None
 def _similarity(value: float, target: float, max_gap: float) -> float:
     """Convert a distance into a 0-to-1 similarity score."""
     return max(0.0, 1 - abs(float(value) - float(target)) / float(max_gap))
+
+
+def _estimate_confidence(score: float, num_reasons: int, max_score: float = 20.0) -> float:
+    """
+    Estimate confidence score (0-1) based on recommendation strength.
+    
+    Args:
+        score: Raw numeric score from the recommender
+        num_reasons: Number of matching reasons/features
+        max_score: Maximum possible score
+    
+    Returns:
+        Confidence score between 0 and 1
+    """
+    score_component = min(score / max_score, 1.0) * 0.6
+    reason_component = min(num_reasons / 4.0, 1.0) * 0.4
+    confidence = score_component + reason_component
+    return round(confidence, 2)
 
 
 def _get_mode_weights(mode: str) -> Dict[str, float]:
@@ -276,9 +298,33 @@ def score_song(
 
 
 def recommend_songs(
-    user_prefs: Dict[str, Any], songs: List[Dict[str, Any]], k: int = 5, mode: str = "balanced"
-) -> List[Tuple[Dict[str, Any], float, str]]:
-    """Score songs, rerank with a diversity penalty, and return the top-k results."""
+    user_prefs: Dict[str, Any], songs: List[Dict[str, Any]], k: int = 5, mode: str = "balanced",
+    use_llm: bool = False, session_id: Optional[str] = None
+) -> List[Tuple[Dict[str, Any], float, str, float, bool]]:
+    """
+    Score songs, rerank with a diversity penalty, and return the top-k results.
+    
+    Args:
+        user_prefs: User preferences dictionary
+        songs: List of song dictionaries
+        k: Number of recommendations to return
+        mode: Scoring mode (balanced, genre-first, mood-first, energy-focused)
+        use_llm: Whether to generate LLM-based explanations
+        session_id: Unique session identifier for logging
+    
+    Returns:
+        List of tuples: (song_dict, score, explanation, confidence, used_llm)
+    """
+    if session_id is None:
+        session_id = str(uuid.uuid4())
+    
+    # Import LLM explainer here to avoid hard dependency on OpenAI
+    try:
+        from .llm_explainer import generate_recommendation_explanation, log_recommendation_decision
+    except ImportError:
+        generate_recommendation_explanation = None
+        log_recommendation_decision = None
+    
     active_mode = user_prefs.get("mode", mode)
     scored_candidates = []
 
@@ -286,7 +332,7 @@ def recommend_songs(
         score, reasons = score_song(user_prefs, song, mode=active_mode)
         scored_candidates.append({"song": song, "score": score, "reasons": reasons})
 
-    selected: List[Tuple[Dict[str, Any], float, str]] = []
+    selected: List[Tuple[Dict[str, Any], float, str, float, bool]] = []
     remaining = scored_candidates.copy()
     artist_counts: Counter[str] = Counter()
     genre_counts: Counter[str] = Counter()
@@ -323,8 +369,31 @@ def recommend_songs(
         genre_counts[str(chosen_song.get("genre", ""))] += 1
 
         explanation_parts = chosen["reasons"] + best_penalties
-        explanation = "; ".join(explanation_parts) if explanation_parts else f"{active_mode} mode match"
-        selected.append((chosen_song, round(best_adjusted_score, 2), explanation))
+        base_explanation = "; ".join(explanation_parts) if explanation_parts else f"{active_mode} mode match"
+        
+        # Generate LLM-based explanation if available
+        confidence = 0.0
+        used_llm = False
+        if use_llm and generate_recommendation_explanation:
+            try:
+                explanation, confidence, used_llm = generate_recommendation_explanation(
+                    user_prefs, chosen_song, round(best_adjusted_score, 2), chosen["reasons"], use_llm=True
+                )
+                # Log the decision
+                if log_recommendation_decision:
+                    log_recommendation_decision(
+                        session_id, user_prefs, chosen_song, round(best_adjusted_score, 2),
+                        confidence, explanation, used_llm
+                    )
+            except Exception as e:
+                logger.warning(f"Failed to generate LLM explanation: {e}")
+                explanation = base_explanation
+                confidence = _estimate_confidence(round(best_adjusted_score, 2), len(chosen["reasons"]))
+        else:
+            explanation = base_explanation
+            confidence = _estimate_confidence(round(best_adjusted_score, 2), len(chosen["reasons"]))
+        
+        selected.append((chosen_song, round(best_adjusted_score, 2), explanation, confidence, used_llm))
 
     return selected
 

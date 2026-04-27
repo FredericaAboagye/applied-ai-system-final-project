@@ -299,7 +299,7 @@ def score_song(
 
 def recommend_songs(
     user_prefs: Dict[str, Any], songs: List[Dict[str, Any]], k: int = 5, mode: str = "balanced",
-    use_llm: bool = False, session_id: Optional[str] = None
+    use_llm: bool = False, session_id: Optional[str] = None, style: str = "neutral"
 ) -> List[Tuple[Dict[str, Any], float, str, float, bool]]:
     """
     Score songs, rerank with a diversity penalty, and return the top-k results.
@@ -311,6 +311,7 @@ def recommend_songs(
         mode: Scoring mode (balanced, genre-first, mood-first, energy-focused)
         use_llm: Whether to generate LLM-based explanations
         session_id: Unique session identifier for logging
+        style: Explanation style (neutral, casual, technical, poetic)
     
     Returns:
         List of tuples: (song_dict, score, explanation, confidence, used_llm)
@@ -377,7 +378,7 @@ def recommend_songs(
         if use_llm and generate_recommendation_explanation:
             try:
                 explanation, confidence, used_llm = generate_recommendation_explanation(
-                    user_prefs, chosen_song, round(best_adjusted_score, 2), chosen["reasons"], use_llm=True
+                    user_prefs, chosen_song, round(best_adjusted_score, 2), chosen["reasons"], use_llm=True, style=style
                 )
                 # Log the decision
                 if log_recommendation_decision:

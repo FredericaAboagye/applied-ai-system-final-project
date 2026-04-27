@@ -53,7 +53,8 @@ def generate_recommendation_explanation(
     song: Dict,
     score: float,
     reasons: list,
-    use_llm: bool = True
+    use_llm: bool = True,
+    style: str = "neutral"
 ) -> Tuple[str, float, bool]:
     """
     Generate a natural language explanation for a recommendation using LLM if available.
@@ -64,6 +65,7 @@ def generate_recommendation_explanation(
         score: Numeric score from recommender
         reasons: List of reason strings from scoring
         use_llm: Whether to attempt LLM generation
+        style: Explanation style ("neutral", "casual", "technical", "poetic")
     
     Returns:
         Tuple of (explanation_text, confidence_score, used_llm)
@@ -79,7 +81,7 @@ def generate_recommendation_explanation(
         if api_key:
             try:
                 explanation = _generate_llm_explanation(
-                    user_prefs, song, score, reasons, api_key
+                    user_prefs, song, score, reasons, api_key, style
                 )
                 if explanation:
                     used_llm = True
@@ -100,7 +102,8 @@ def _generate_llm_explanation(
     song: Dict,
     score: float,
     reasons: list,
-    api_key: str
+    api_key: str,
+    style: str = "neutral"
 ) -> Optional[str]:
     """
     Use OpenAI API to generate a natural language explanation.
@@ -111,6 +114,7 @@ def _generate_llm_explanation(
         score: Numeric score
         reasons: List of reason strings
         api_key: OpenAI API key
+        style: Explanation style ("neutral", "casual", "technical", "poetic")
     
     Returns:
         Generated explanation string or None if failed
@@ -118,8 +122,19 @@ def _generate_llm_explanation(
     try:
         client = openai.OpenAI(api_key=api_key)
         
+        # Style-specific instructions
+        style_instructions = {
+            "casual": "Use a friendly, conversational tone. Feel free to use contractions and colloquial language.",
+            "technical": "Use precise, analytical language. Focus on the music theory and acoustic properties that match.",
+            "poetic": "Use descriptive, evocative language that captures the mood and feeling of the music.",
+            "neutral": "Use a clear, professional tone that is easy to understand."
+        }
+        style_prompt = style_instructions.get(style, style_instructions["neutral"])
+        
         prompt = f"""Given a user's music preferences and a song recommendation, generate a 
 concise 1-2 sentence explanation of why this song matches their taste.
+
+{style_prompt}
 
 User preferences:
 - Favorite genre: {user_prefs.get('genre', 'Unknown')}

@@ -124,7 +124,7 @@
 3. Show system demo (main.py + test_harness.py output)
 4. Keep to 5-7 minutes
 5. Copy shareable link
-6. Update README.md (search for \"[Link to Loom video]\")
+6. Update README.md 
 
 ### STEP 3: Git Commit & Push (10 min)
 
